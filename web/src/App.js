@@ -12,21 +12,21 @@ function App() {
   }, [])
 
   async function loadList(){
-    const response = await api.get('/')
+    const response = await api.get('/list')
     setLists(response.data)
   }
 
   async function handleAddList(data){
-    const response = await api.post('/', data)
+    const response = await api.post('/list', data)
     setLists([...lists, response.data])
   }
   async function handleDeleteList(data){
-    await api.delete(`/delete/${data.id}`)
+    await api.delete(`/list/${data.id}`)
     loadList()
   }
 
   async function handleUpdateList(data){
-    await api.put(`/update/${data.id}`, data)
+    await api.put(`/list/${data.id}`, data)
     loadList()
   }
 

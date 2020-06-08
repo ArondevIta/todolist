@@ -1,18 +1,24 @@
-const express = require('express')
-const List = require('../models/list')
+const List = require('../models/List')
 
-const routes = express.Router()
-
-routes.get('/', async (req, res) =>{
+module.exports = {
+  async index(req, res){
     try {
         let list = await List.find()
         return res.json(list)
     } catch (error) {
         return res.status(500).json({ error: 'Erro ao puxar dados' })
     }
-})
-
-routes.post('/', async(req, res)=>{
+  },
+  async show(req, res){
+    try {
+        const { id } = req.params
+        let list = await List.findById({_id:id})
+        return res.json(list)
+    } catch (error) {
+        return res.json({ error: error })
+    }
+  },
+  async store(req, res){
     try {
        const { title, description } = req.body
        let list = new List({ title, description })
@@ -21,19 +27,8 @@ routes.post('/', async(req, res)=>{
     } catch (error) {
         return res.json({ error: 'Erro ao criar lista' })
     }
-})
-
-routes.get('/:id', async(req, res)=>{
-    try {
-        const { id } = req.params
-        let list = await List.findById({_id:id})
-        return res.json(list)
-    } catch (error) {
-        return res.json({ error: error })
-    }
-})
-
-routes.put('/update/:id', async(req, res)=>{
+  },
+  async update(req, res){
     try {
         const { id } = req.params
         const { status } = req.body
@@ -45,9 +40,8 @@ routes.put('/update/:id', async(req, res)=>{
     } catch (error) {
         return res.json({error: 'Erro ao atualizar lista'})
     }
-})
-
-routes.delete('/delete/:id', async(req, res)=>{
+  },
+  async drop(req, res){
     try {
         const { id } = req.params
         let list = await List.findById({_id:id})
@@ -57,6 +51,5 @@ routes.delete('/delete/:id', async(req, res)=>{
     } catch (error) {
         return res.json({error: error})
     }
-})
-
-module.exports = routes
+  }
+}
